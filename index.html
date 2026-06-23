@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Learning</title>
+  <style>
+    :root {
+      --text:    #2c2c2c;
+      --bg:      #fffff8;
+      --accent:  #1a4a8a;
+      --subtle:  #6b6b6b;
+      --border:  #d8d8cc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Georgia, 'Palatino Linotype', Palatino, serif;
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--bg);
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3rem 1.75rem 5rem;
+    }
+    h1 { font-size: 2rem; font-weight: normal; margin-bottom: 0.4rem; }
+    h2 { font-size: 1.1rem; font-weight: normal; margin: 2.5rem 0 0.8rem;
+         border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+    p  { margin-bottom: 1rem; color: var(--subtle); }
+    a  { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .track {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1rem;
+      background: #fff;
+    }
+    .track-title { font-size: 1.1rem; margin-bottom: 0.3rem; }
+    .track-desc  { font-size: 0.9em; color: var(--subtle); margin-bottom: 1rem; }
+    .lessons     { list-style: none; padding: 0; }
+    .lessons li  { padding: 0.3rem 0; border-top: 1px solid var(--border); }
+    .lessons li:first-child { border-top: none; }
+    .lesson-num  { font-family: 'Menlo', monospace; font-size: 0.8em;
+                   color: var(--subtle); margin-right: 0.5rem; }
+    footer { margin-top: 4rem; font-size: 0.82em; color: var(--subtle);
+             border-top: 1px solid var(--border); padding-top: 1rem; }
+  </style>
+</head>
+<body>
+
+<h1>My Learning</h1>
+<p>A personal learning repo. Each track is a structured deep-dive.</p>
+
+<h2>Tracks</h2>
+
+<div class="track">
+  <div class="track-title">AI and Transformers</div>
+  <div class="track-desc">
+    Ground-up understanding of modern AI, traced as a historical timeline —
+    from the first artificial neuron through transformers and foundation models.
+  </div>
+  <ul class="lessons">
+    <li>
+      <span class="lesson-num">0001</span>
+      <a href="learnings/AI-and-Transformers/lessons/0001-the-birth-of-the-artificial-neuron.html">
+        The Birth of the Artificial Neuron
+      </a>
+      <span style="font-size:0.82em; color:var(--subtle);">
+        — McCulloch &amp; Pitts → Perceptron → First AI Winter
+      </span>
+    </li>
+  </ul>
+</div>
+
+<footer>
+  <a href="https://github.com/rostiSe/mylearning">github.com/rostiSe/mylearning</a>
+</footer>
+
+</body>
+</html>
