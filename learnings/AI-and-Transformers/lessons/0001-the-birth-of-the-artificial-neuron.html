@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0001 — The Birth of the Artificial Neuron</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<header class="lesson-header">
+  <div class="era-badge">1943–1969 · Foundations</div>
+  <div class="lesson-number">Lesson 0001</div>
+  <h1>The Birth of the Artificial Neuron</h1>
+  <p class="lesson-subtitle">McCulloch &amp; Pitts (1943) → The Perceptron (1958) → First AI Winter (1969)</p>
+</header>
+
+
+<h2>The question that started everything</h2>
+
+<p>
+  In 1943, a neurophysiologist named Warren McCulloch and a mathematician named
+  Walter Pitts asked an audacious question: <em>can thought be computation?</em>
+</p>
+
+<p>
+  Not a metaphor. An actual engineering question. If a brain is made of neurons
+  that fire based on their inputs, maybe you could model those neurons
+  mathematically — and then chain them together to compute anything a brain
+  computes.
+</p>
+
+<p>
+  Their 1943 paper, "A Logical Calculus of the Ideas Immanent in Nervous
+  Activity," gave the first answer. It is the conceptual ancestor of every
+  neural network in existence today — including whatever produced this lesson.
+</p>
+
+
+<h2>What a real neuron actually does</h2>
+
+<p>
+  A biological neuron receives electrical signals from upstream neurons through
+  branching fibres called <em>dendrites</em>. It sums those signals. If the
+  total crosses some threshold, the neuron fires — it sends its own signal down
+  the long fibre (<em>axon</em>) that connects to the next neurons.
+</p>
+
+<p>
+  That is the entire mechanism McCulloch and Pitts kept. They discarded
+  timing, chemistry, feedback loops — everything except:
+</p>
+
+<ol>
+  <li>Inputs arrive, each with some weight.</li>
+  <li>Weights are summed.</li>
+  <li>If the sum exceeds a threshold, the neuron fires.</li>
+</ol>
+
+<p>This is not a realistic model of a brain. It is a <em>logical</em> abstraction —
+just enough structure to reason about computation.</p>
+
+
+<h2>The McCulloch–Pitts model</h2>
+
+<p>
+  Formally, the neuron has <em>n</em> inputs x₁, x₂, …, xₙ — each either 0
+  (no signal) or 1 (signal present). Each input has a weight wᵢ that says
+  how much that input's vote counts. The neuron computes:
+</p>
+
+<div class="math">
+  z = w₁x₁ + w₂x₂ + … + wₙxₙ
+  <br>
+  output = 1 &nbsp;if&nbsp; z ≥ θ, &nbsp;else&nbsp; 0
+  <span class="math-label">The McCulloch–Pitts neuron. θ (theta) is the firing threshold.</span>
+</div>
+
+<p>
+  In the compact notation you will see everywhere: <strong>z = wᵀx</strong>,
+  where <strong>w</strong> and <strong>x</strong> are vectors (lists of numbers)
+  and <em>wᵀx</em> means "multiply each pair and sum" — a dot product.
+  Then apply the threshold.
+</p>
+
+<!-- Neuron diagram -->
+<svg class="diagram" viewBox="0 0 460 210" width="460" height="210"
+     xmlns="http://www.w3.org/2000/svg" aria-label="McCulloch–Pitts neuron diagram">
+
+  <!-- Arrow marker -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="7"
+            refX="6" refY="3.5" orient="auto">
+      <polygon points="0 0, 8 3.5, 0 7" fill="#6b6b6b"/>
+    </marker>
+  </defs>
+
+  <!-- Input circles -->
+  <circle cx="55" cy="55"  r="24" fill="#fffff8" stroke="#1a4a8a" stroke-width="1.5"/>
+  <text x="55" y="61"  text-anchor="middle" font-family="Georgia,serif"
+        font-style="italic" font-size="15" fill="#2c2c2c">x₁</text>
+
+  <circle cx="55" cy="110" r="24" fill="#fffff8" stroke="#1a4a8a" stroke-width="1.5"/>
+  <text x="55" y="116" text-anchor="middle" font-family="Georgia,serif"
+        font-style="italic" font-size="15" fill="#2c2c2c">x₂</text>
+
+  <circle cx="55" cy="165" r="24" fill="#fffff8" stroke="#1a4a8a" stroke-width="1.5"/>
+  <text x="55" y="171" text-anchor="middle" font-family="Georgia,serif"
+        font-style="italic" font-size="15" fill="#2c2c2c">x₃</text>
+
+  <!-- Connection lines -->
+  <line x1="79" y1="55"  x2="200" y2="100" stroke="#9aa8bc" stroke-width="1.4"/>
+  <line x1="79" y1="110" x2="200" y2="110" stroke="#9aa8bc" stroke-width="1.4"/>
+  <line x1="79" y1="165" x2="200" y2="120" stroke="#9aa8bc" stroke-width="1.4"/>
+
+  <!-- Weight labels -->
+  <text x="126" y="70"  text-anchor="middle" font-family="Georgia,serif"
+        font-style="italic" font-size="13" fill="#6b6b6b">w₁</text>
+  <text x="137" y="106" text-anchor="middle" font-family="Georgia,serif"
+        font-style="italic" font-size="13" fill="#6b6b6b">w₂</text>
+  <text x="126" y="155" text-anchor="middle" font-family="Georgia,serif"
+        font-style="italic" font-size="13" fill="#6b6b6b">w₃</text>
+
+  <!-- Neuron body -->
+  <circle cx="232" cy="110" r="35" fill="#fffff8" stroke="#1a4a8a" stroke-width="2"/>
+  <text x="232" y="105" text-anchor="middle" font-size="19"
+        font-family="Georgia,serif" fill="#1a4a8a">Σ</text>
+  <text x="232" y="123" text-anchor="middle" font-size="11"
+        font-family="Georgia,serif" fill="#6b6b6b">≥ θ ?</text>
+
+  <!-- Output line -->
+  <line x1="267" y1="110" x2="370" y2="110" stroke="#6b6b6b"
+        stroke-width="1.6" marker-end="url(#arr)"/>
+
+  <!-- Output label -->
+  <text x="392" y="116" text-anchor="middle" font-family="Georgia,serif"
+        font-style="italic" font-size="16" fill="#2c2c2c">ŷ</text>
+
+  <!-- Brace label on left -->
+  <text x="8" y="115" font-family="Georgia,serif" font-size="11"
+        fill="#6b6b6b">inputs</text>
+</svg>
+<span class="diagram-caption">
+  A McCulloch–Pitts neuron. Inputs x₁…xₙ arrive with weights w₁…wₙ.
+  The neuron fires (ŷ = 1) when the weighted sum ≥ threshold θ.
+</span>
+
+<p>
+  Think of it as a <em>weighted vote</em>. Each input casts a vote
+  (0 or 1), weighted by how much that input matters.
+  The neuron fires if the total vote clears the bar.
+</p>
+
+
+<h2>What this model can already compute</h2>
+
+<p>
+  Despite its simplicity, the McCulloch–Pitts neuron can implement any basic
+  logical operation. You just choose weights and threshold carefully:
+</p>
+
+<pre>AND gate: w₁ = 1, w₂ = 1, θ = 2
+  → fires only when both x₁ = 1 AND x₂ = 1 (sum = 2 ≥ 2)
+
+OR gate:  w₁ = 1, w₂ = 1, θ = 1
+  → fires when either x₁ = 1 OR x₂ = 1 (sum ≥ 1)
+
+NOT gate: w₁ = −1, θ = −0.5
+  → fires only when x₁ = 0 (sum = 0 ≥ −0.5); silent when x₁ = 1 (sum = −1 &lt; −0.5)</pre>
+
+<p>
+  McCulloch and Pitts proved you can chain these neurons to compute
+  <em>any</em> logical formula — AND, OR, NOT, and their combinations.
+  Since all of mathematics can be built from logical operations,
+  this suggested that thought itself might be implementable in neurons.
+</p>
+
+<div class="aside">
+  <span class="aside-label">Why negative weights matter</span>
+  The NOT gate uses a <em>negative</em> weight. That is an inhibitory
+  connection — the input actively suppresses firing. Real neurons have
+  both excitatory (positive weight) and inhibitory (negative weight)
+  connections. The model keeps this.
+</div>
+
+
+<h2>The missing piece: there is no learning</h2>
+
+<p>
+  There is a serious problem. The weights and threshold are
+  <em>set by hand</em> for each task. A human figures out that AND needs
+  (w₁=1, w₂=1, θ=2). That is not learning — that is programming.
+</p>
+
+<p>
+  A brain learns. It adjusts its connections from experience.
+  The McCulloch–Pitts model provides a mechanism but no process.
+</p>
+
+<p>
+  Frank Rosenblatt, a psychologist at Cornell, fixed this in 1958.
+</p>
+
+
+<h2>The Perceptron: teaching the neuron to learn</h2>
+
+<p>
+  Rosenblatt's <em>Perceptron</em> is the same weighted-vote model, but
+  now with a learning algorithm. The key idea: if the neuron makes a
+  mistake, nudge the weights in the direction that would have gotten
+  it right.
+</p>
+
+<p>
+  Concretely, for each labelled example (<strong>x</strong>, y) —
+  where <strong>x</strong> is the input and y ∈ {0, 1} is the correct answer:
+</p>
+
+<div class="math">
+  ŷ &nbsp;= &nbsp;1 &nbsp;if &nbsp;<strong>w</strong>ᵀ<strong>x</strong> ≥ θ, &nbsp;else &nbsp;0
+  <br><br>
+  wᵢ &nbsp;← &nbsp;wᵢ &nbsp;+ &nbsp;η(y − ŷ)xᵢ &nbsp;&nbsp;for each input i
+  <span class="math-label">The Perceptron learning rule. η (eta) is the learning rate — how big a step to take.</span>
+</div>
+
+<p>
+  Walk through the three cases:
+</p>
+
+<ul>
+  <li>
+    <strong>Correct prediction</strong> — (y − ŷ) = 0. Nothing changes.
+  </li>
+  <li>
+    <strong>Should have fired but didn't</strong> — y = 1, ŷ = 0, so
+    (y − ŷ) = +1. We <em>increase</em> the weights of every active input
+    (xᵢ = 1), making those inputs more likely to push the sum over threshold
+    next time.
+  </li>
+  <li>
+    <strong>Fired when it shouldn't have</strong> — y = 0, ŷ = 1, so
+    (y − ŷ) = −1. We <em>decrease</em> weights of active inputs, making
+    them less likely to trigger a false alarm.
+  </li>
+</ul>
+
+<p>
+  Repeat for all training examples, loop again, keep going until no mistakes
+  remain. Rosenblatt proved something remarkable: <strong>if the data is
+  linearly separable</strong>, the Perceptron is guaranteed to find a
+  solution in a finite number of steps — the Perceptron Convergence Theorem.
+</p>
+
+<div class="aside">
+  <span class="aside-label">Why this matters historically</span>
+  Every gradient-based learning algorithm in deep learning today — SGD,
+  Adam, RMSProp — descends conceptually from this rule. The core idea
+  ("made a mistake; adjust in the direction that corrects it") has never
+  changed. What changed is how you compute the adjustment for deeper networks.
+</div>
+
+<p>
+  The press went wild. <em>The New York Times</em> reported that the Navy
+  expected the Perceptron to "be able to walk, talk, see, write, reproduce
+  itself and be conscious of its existence." The Navy funded a physical
+  Perceptron — the Mark I — weighing 7 tonnes, with randomly wired
+  photocells for "eyes." Rosenblatt talked about machines that would
+  translate languages and recognise faces.
+</p>
+
+<p>It did not go well.</p>
+
+
+<h2>Linear separability — and why XOR breaks everything</h2>
+
+<p>
+  Rosenblatt's convergence guarantee came with a condition:
+  <em>linearly separable</em>. This has a precise geometric meaning.
+</p>
+
+<p>
+  In 2D (two inputs), a Perceptron draws a decision boundary that is always
+  a straight line. Points on one side fire (ŷ = 1); points on the other side
+  don't (ŷ = 0). Linearly separable means: there <em>exists</em> some line
+  that correctly separates the two classes.
+</p>
+
+<!-- AND vs XOR linear separability diagram -->
+<svg class="diagram" viewBox="0 0 530 240" width="530" height="240"
+     xmlns="http://www.w3.org/2000/svg"
+     aria-label="AND is linearly separable; XOR is not">
+
+  <!-- ── Left panel: AND ── -->
+  <text x="110" y="28" text-anchor="middle" font-family="Georgia,serif"
+        font-weight="bold" font-size="14" fill="#2c2c2c">AND</text>
+
+  <!-- Axis lines -->
+  <line x1="62" y1="195" x2="185" y2="195" stroke="#d8d8cc" stroke-width="1"/>
+  <line x1="62" y1="195" x2="62"  y2="72"  stroke="#d8d8cc" stroke-width="1"/>
+
+  <!-- Axis labels -->
+  <text x="130" y="213" text-anchor="middle" font-family="Georgia,serif"
+        font-style="italic" font-size="12" fill="#6b6b6b">x₁</text>
+  <text x="48"  y="140" text-anchor="middle" font-family="Georgia,serif"
+        font-style="italic" font-size="12" fill="#6b6b6b">x₂</text>
+  <text x="75"  y="212" text-anchor="middle" font-family="Georgia,serif"
+        font-size="11" fill="#9aa8bc">0</text>
+  <text x="148" y="212" text-anchor="middle" font-family="Georgia,serif"
+        font-size="11" fill="#9aa8bc">1</text>
+  <text x="50"  y="198" text-anchor="middle" font-family="Georgia,serif"
+        font-size="11" fill="#9aa8bc">0</text>
+  <text x="50"  y="125" text-anchor="middle" font-family="Georgia,serif"
+        font-size="11" fill="#9aa8bc">1</text>
+
+  <!-- AND: class-0 points (open circles) -->
+  <circle cx="75"  cy="195" r="9" fill="#fffff8" stroke="#1a4a8a" stroke-width="1.8"/>
+  <circle cx="148" cy="195" r="9" fill="#fffff8" stroke="#1a4a8a" stroke-width="1.8"/>
+  <circle cx="75"  cy="122" r="9" fill="#fffff8" stroke="#1a4a8a" stroke-width="1.8"/>
+
+  <!-- AND: class-1 point (filled) -->
+  <circle cx="148" cy="122" r="9" fill="#1a4a8a" stroke="#1a4a8a" stroke-width="1.8"/>
+
+  <!-- Labels for class-1 point -->
+  <text x="165" y="118" font-family="Georgia,serif" font-size="10" fill="#1a4a8a">1</text>
+
+  <!-- Separating line for AND: from (62,80) to (185,185) -->
+  <line x1="58" y1="83" x2="188" y2="200"
+        stroke="#2a6e2a" stroke-width="1.8" stroke-dasharray="none"/>
+
+  <text x="110" y="56" text-anchor="middle" font-family="Georgia,serif"
+        font-size="10" fill="#2a6e2a">a line works ✓</text>
+
+  <!-- ── Divider ── -->
+  <line x1="265" y1="30" x2="265" y2="220" stroke="#d8d8cc" stroke-width="1"/>
+
+  <!-- ── Right panel: XOR ── -->
+  <text x="400" y="28" text-anchor="middle" font-family="Georgia,serif"
+        font-weight="bold" font-size="14" fill="#2c2c2c">XOR</text>
+
+  <!-- Axis lines -->
+  <line x1="352" y1="195" x2="475" y2="195" stroke="#d8d8cc" stroke-width="1"/>
+  <line x1="352" y1="195" x2="352" y2="72"  stroke="#d8d8cc" stroke-width="1"/>
+
+  <!-- Axis labels -->
+  <text x="420" y="213" text-anchor="middle" font-family="Georgia,serif"
+        font-style="italic" font-size="12" fill="#6b6b6b">x₁</text>
+  <text x="338" y="140" text-anchor="middle" font-family="Georgia,serif"
+        font-style="italic" font-size="12" fill="#6b6b6b">x₂</text>
+  <text x="365" y="212" text-anchor="middle" font-family="Georgia,serif"
+        font-size="11" fill="#9aa8bc">0</text>
+  <text x="438" y="212" text-anchor="middle" font-family="Georgia,serif"
+        font-size="11" fill="#9aa8bc">1</text>
+  <text x="340" y="198" text-anchor="middle" font-family="Georgia,serif"
+        font-size="11" fill="#9aa8bc">0</text>
+  <text x="340" y="125" text-anchor="middle" font-family="Georgia,serif"
+        font-size="11" fill="#9aa8bc">1</text>
+
+  <!-- XOR: class-0 points (open circles) — at (0,0) and (1,1) -->
+  <circle cx="365" cy="195" r="9" fill="#fffff8" stroke="#1a4a8a" stroke-width="1.8"/>
+  <circle cx="438" cy="122" r="9" fill="#fffff8" stroke="#1a4a8a" stroke-width="1.8"/>
+
+  <!-- XOR: class-1 points (filled) — at (0,1) and (1,0) -->
+  <circle cx="365" cy="122" r="9" fill="#1a4a8a" stroke="#1a4a8a" stroke-width="1.8"/>
+  <circle cx="438" cy="195" r="9" fill="#1a4a8a" stroke="#1a4a8a" stroke-width="1.8"/>
+
+  <!-- Two failed separator lines (dashed red) -->
+  <!-- Attempt 1: horizontal at y≈158 -->
+  <line x1="345" y1="158" x2="480" y2="158"
+        stroke="#b83232" stroke-width="1.4" stroke-dasharray="5,3"/>
+  <!-- Attempt 2: diagonal -->
+  <line x1="350" y1="88" x2="478" y2="205"
+        stroke="#b83232" stroke-width="1.4" stroke-dasharray="5,3"/>
+
+  <text x="400" y="56" text-anchor="middle" font-family="Georgia,serif"
+        font-size="10" fill="#b83232">no line works ✗</text>
+
+  <!-- Legend -->
+  <circle cx="70"  cy="230" r="6" fill="#fffff8" stroke="#1a4a8a" stroke-width="1.5"/>
+  <text x="82" y="234" font-family="Georgia,serif" font-size="11" fill="#6b6b6b">output = 0</text>
+  <circle cx="155" cy="230" r="6" fill="#1a4a8a" stroke="#1a4a8a" stroke-width="1.5"/>
+  <text x="167" y="234" font-family="Georgia,serif" font-size="11" fill="#6b6b6b">output = 1</text>
+</svg>
+<span class="diagram-caption">
+  AND is linearly separable — one line cleanly separates the single "1" point.
+  XOR is not — the "1" outputs sit at diagonal corners; any line misclassifies at least one.
+</span>
+
+<p>
+  Now look at XOR. The table is:
+</p>
+
+<pre>(x₁=0, x₂=0) → 0    (x₁=1, x₂=0) → 1
+(x₁=0, x₂=1) → 1    (x₁=1, x₂=1) → 0</pre>
+
+<p>
+  The class-1 outputs (filled points in the diagram) sit at <em>opposite corners</em>
+  — the anti-diagonal. The class-0 outputs sit at the other two corners. No
+  straight line can separate these groups. If you try a horizontal line, you
+  split one column correctly but botch the other. A diagonal fares no better.
+  Any line you draw misclassifies at least one point.
+</p>
+
+<p>
+  This is not a quirk of XOR specifically. It is a consequence of what a
+  Perceptron fundamentally computes: a <em>linear</em> decision boundary.
+  Change the weights, shift the threshold — you are still just rotating and
+  translating a flat line. Non-linearly separable patterns are permanently
+  out of reach.
+</p>
+
+
+<h2>The fall: Minsky &amp; Papert (1969) and the first AI winter</h2>
+
+<p>
+  Marvin Minsky and Seymour Papert, two of the leading figures at MIT's AI lab,
+  published <em>Perceptrons</em> in 1969. It was a rigorous mathematical
+  analysis of what single-layer Perceptrons could and could not compute.
+  The XOR limitation was front and centre.
+</p>
+
+<p>
+  The book was technically correct. Its impact was catastrophic and arguably
+  not entirely fair.
+</p>
+
+<p>
+  Minsky and Papert's proof focused on <em>single-layer</em> networks. They
+  knew multi-layer networks could solve XOR — you can construct one by hand.
+  What they argued was that there was no known efficient way to <em>train</em>
+  multi-layer networks. At the time, that was true. The training algorithm
+  that would eventually fix this — backpropagation — was not widely
+  understood until 1986.
+</p>
+
+<p>
+  But the impression left in the wider research community (and funding agencies)
+  was stronger than the actual claim: that neural networks were fundamentally
+  limited. Funding collapsed. Researchers moved to other approaches.
+  The field entered what is now called the <em>first AI winter</em> — roughly
+  a decade in which neural networks attracted little serious investment.
+</p>
+
+<div class="warning">
+  <strong>A historical note worth holding:</strong> this pattern —
+  a proof that some narrow version of a technique is limited, generalised into
+  a claim that the whole approach is doomed — repeats in AI history.
+  Minsky and Papert's critique of single-layer Perceptrons was conflated with
+  a critique of neural networks in general. Keep an eye for this when you read
+  about more recent "AI is hitting a wall" claims.
+</div>
+
+
+<h2>What this set up</h2>
+
+<p>
+  The Perceptron failure planted two seeds for the next era. Both are
+  worth internalising, because every major idea that follows grows from them:
+</p>
+
+<p>
+  <strong>Depth.</strong> A single layer of weighted decisions has a
+  fundamental expressiveness ceiling. You need multiple layers — the output
+  of one layer becoming the input of the next — to carve out arbitrarily
+  complex decision boundaries. This is why every modern network is "deep."
+</p>
+
+<p>
+  <strong>Smooth non-linearity.</strong> The Perceptron's step function
+  (0 or 1) is mathematically brutal. It has zero gradient almost everywhere,
+  and an undefined gradient at the threshold. You cannot use calculus to
+  adjust it in a principled way. The next generation of models would replace
+  the hard step with smooth "squashing" functions — the sigmoid, later ReLU —
+  that could be differentiated, making calculus (specifically the chain rule)
+  the engine of learning.
+</p>
+
+<p>
+  Those two ideas — depth and differentiable non-linearity — are the
+  complete recipe for backpropagation, the algorithm that would revive
+  the field in 1986. That is Lesson 0002.
+</p>
+
+
+<!-- ───────────────── QUIZ ───────────────── -->
+
+<section class="quiz">
+  <h2>Check your understanding</h2>
+  <p class="quiz-intro">
+    Answer from memory if you can. The goal is retrieval practice,
+    not recognition — close this lesson and try before looking back.
+  </p>
+
+  <!-- Q1 -->
+  <div class="question">
+    <p class="question-text">
+      1. A McCulloch–Pitts neuron fires when its inputs cross a threshold.
+         What is the exact computation that produces the value being thresholded?
+    </p>
+    <div class="options">
+      <button class="option" data-correct="true">
+        A weighted sum of its inputs (each input multiplied by its weight, then all added together)
+      </button>
+      <button class="option" data-correct="false">
+        A product of its inputs (each input multiplied together, no separate weights)
+      </button>
+      <button class="option" data-correct="false">
+        The maximum of its inputs (whichever single input has the highest value wins)
+      </button>
+      <button class="option" data-correct="false">
+        An average of its inputs (each input counted equally, no separate weights)
+      </button>
+    </div>
+    <div class="feedback">
+      <strong>Correct.</strong> z = w₁x₁ + w₂x₂ + … + wₙxₙ — a dot product of
+      weight and input vectors. The threshold compares this sum to θ.
+      The weighted sum is the core operation in virtually every neural network layer ever built.
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question">
+    <p class="question-text">
+      2. Rosenblatt's Perceptron Convergence Theorem guarantees a solution in
+         finite steps — but only under one condition. What is it?
+    </p>
+    <div class="options">
+      <button class="option" data-correct="false">
+        The learning rate η must be set below 0.1 before training begins
+      </button>
+      <button class="option" data-correct="false">
+        The network must have at least two hidden layers between input and output
+      </button>
+      <button class="option" data-correct="true">
+        The training data must be linearly separable (a hyperplane can correctly divide the classes)
+      </button>
+      <button class="option" data-correct="false">
+        The input features must be normalised to values between 0 and 1 before training
+      </button>
+    </div>
+    <div class="feedback">
+      <strong>Correct.</strong> "Linearly separable" means there exists a flat
+      hyperplane (a line in 2D) that puts all class-1 examples on one side and
+      all class-0 examples on the other. If no such hyperplane exists — as with
+      XOR — the Perceptron will cycle forever without converging.
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question">
+    <p class="question-text">
+      3. The Perceptron learning rule adjusts a weight wᵢ by the term
+         η(y − ŷ)xᵢ. What happens to wᵢ when the neuron fires but should
+         not have (a false alarm)?
+    </p>
+    <div class="options">
+      <button class="option" data-correct="false">
+        wᵢ increases, making the neuron more likely to fire on similar inputs in future
+      </button>
+      <button class="option" data-correct="true">
+        wᵢ decreases (for active inputs), making the neuron less likely to fire on similar inputs
+      </button>
+      <button class="option" data-correct="false">
+        wᵢ is reset to zero to remove the false association entirely from the network
+      </button>
+      <button class="option" data-correct="false">
+        wᵢ is unchanged; only the threshold θ is adjusted to suppress future false alarms
+      </button>
+    </div>
+    <div class="feedback">
+      <strong>Correct.</strong> False alarm: y = 0, ŷ = 1, so (y − ŷ) = −1.
+      For any input xᵢ = 1 (active), wᵢ ← wᵢ + η(−1)(1) = wᵢ − η.
+      The weight decreases, pushing the weighted sum below threshold for similar inputs next time.
+      Only <em>active</em> inputs (xᵢ = 1) are adjusted — inputs that weren't involved in
+      the mistake aren't touched.
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ── Primary source ── -->
+
+<div class="primary-source">
+  <span class="source-label">Recommended reading for this lesson</span>
+  <p>
+    <strong>Michael Nielsen, <cite>Neural Networks and Deep Learning</cite>, Chapter 1</strong><br>
+    <a href="http://neuralnetworksanddeeplearning.com/chap1.html"
+       target="_blank" rel="noopener">neuralnetworksanddeeplearning.com/chap1.html</a>
+  </p>
+  <p>
+    Free online. Nielsen builds the Perceptron and its successor (the sigmoid neuron)
+    from scratch, with working Python code. The intuition for linear separability and the
+    limits of single-layer networks is especially clear.
+    This is the highest-quality technical introduction in the field — not a summary,
+    a derivation.
+  </p>
+  <p>
+    <strong>Primary source:</strong>
+    Rosenblatt, F. (1958). "The Perceptron: A Probabilistic Model for Information Storage
+    and Organization in the Brain." <cite>Psychological Review</cite>, 65(6), 386–408.
+    The learning rule and convergence proof in the original.
+  </p>
+</div>
+
+
+<!-- ── Ask your teacher ── -->
+
+<div class="ask-teacher">
+  <strong>Ask your teacher</strong>
+  Anything here unclear or worth digging deeper on? Ask directly in Claude Code.
+  Good follow-up questions from this lesson:
+  <ul>
+    <li>Can you show me <em>why</em> a single line cannot separate XOR, geometrically?</li>
+    <li>How exactly does a two-layer network solve XOR — walk me through the construction.</li>
+    <li>What does the dot product wᵀx look like as a matrix operation, and why does that matter?</li>
+    <li>Minsky and Papert said multi-layer training was intractable in 1969. What changed by 1986?</li>
+  </ul>
+</div>
+
+
+<nav class="lesson-nav">
+  <span></span>
+  <a href="0002-backpropagation-and-the-mlp.html">Next: Multi-Layer Networks &amp; Backpropagation →</a>
+</nav>
+
+
+<footer>
+  <p>AI and Transformers · Learning track · Lesson 0001 of many</p>
+  <p style="margin-top:0.4rem;">
+    <a href="../RESOURCES.md">Resources</a> ·
+    <a href="../timeline.md">Timeline</a> ·
+    <a href="../learning-records/">Learning records</a>
+  </p>
+</footer>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>
